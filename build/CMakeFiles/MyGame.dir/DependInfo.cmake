@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/kanan/mygame/game.cpp" "CMakeFiles/MyGame.dir/game.cpp.o" "gcc" "CMakeFiles/MyGame.dir/game.cpp.o.d"
   "/home/kanan/mygame/main.cpp" "CMakeFiles/MyGame.dir/main.cpp.o" "gcc" "CMakeFiles/MyGame.dir/main.cpp.o.d"
+  "/home/kanan/mygame/score.cpp" "CMakeFiles/MyGame.dir/score.cpp.o" "gcc" "CMakeFiles/MyGame.dir/score.cpp.o.d"
   "/home/kanan/mygame/sound.cpp" "CMakeFiles/MyGame.dir/sound.cpp.o" "gcc" "CMakeFiles/MyGame.dir/sound.cpp.o.d"
   )
 

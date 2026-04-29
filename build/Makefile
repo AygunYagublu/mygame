@@ -177,6 +177,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+score.o: score.cpp.o
+.PHONY : score.o
+
+# target to build an object file
+score.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/score.cpp.o
+.PHONY : score.cpp.o
+
+score.i: score.cpp.i
+.PHONY : score.i
+
+# target to preprocess a source file
+score.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/score.cpp.i
+.PHONY : score.cpp.i
+
+score.s: score.cpp.s
+.PHONY : score.s
+
+# target to generate assembly for a file
+score.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/score.cpp.s
+.PHONY : score.cpp.s
+
 sound.o: sound.cpp.o
 .PHONY : sound.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... score.o"
+	@echo "... score.i"
+	@echo "... score.s"
 	@echo "... sound.o"
 	@echo "... sound.i"
 	@echo "... sound.s"

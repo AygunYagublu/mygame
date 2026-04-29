@@ -9,7 +9,8 @@ add_executable(MyGame
     main.cpp
     game.cpp
     sound.cpp
+    score.cpp
 )
 
 target_include_directories(MyGame PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(MyGame ${SDL2_LIBRARIES} m)
+target_link_libraries(MyGame ${SDL2_LIBRARIES} SDL2_ttf m)

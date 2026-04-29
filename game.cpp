@@ -222,6 +222,9 @@ void Game::render() {
     };
     SDL_RenderFillRect(renderer, &paddle_rect);
 
+    /* skor ekranı */
+    scoreboard.render(renderer, score, high_score);
+
     SDL_RenderPresent(renderer);
 }
 

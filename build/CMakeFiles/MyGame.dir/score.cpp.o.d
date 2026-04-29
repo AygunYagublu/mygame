@@ -1,5 +1,5 @@
-CMakeFiles/MyGame.dir/game.cpp.o: /home/kanan/mygame/game.cpp \
- /usr/include/stdc-predef.h /home/kanan/mygame/game.h \
+CMakeFiles/MyGame.dir/score.cpp.o: /home/kanan/mygame/score.cpp \
+ /usr/include/stdc-predef.h /home/kanan/mygame/score.h \
  /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_main.h \
  /usr/include/SDL2/SDL_stdinc.h /usr/include/SDL2/SDL_config.h \
  /usr/include/x86_64-linux-gnu/SDL2/_real_SDL_config.h \
@@ -224,6 +224,5 @@ CMakeFiles/MyGame.dir/game.cpp.o: /home/kanan/mygame/game.cpp \
  /usr/include/SDL2/SDL_render.h /usr/include/SDL2/SDL_shape.h \
  /usr/include/SDL2/SDL_system.h /usr/include/SDL2/SDL_timer.h \
  /usr/include/SDL2/SDL_version.h /usr/include/SDL2/SDL_locale.h \
- /usr/include/SDL2/SDL_misc.h /home/kanan/mygame/sound.h \
- /home/kanan/mygame/score.h /usr/include/SDL2/SDL_ttf.h \
+ /usr/include/SDL2/SDL_misc.h /usr/include/SDL2/SDL_ttf.h \
  /usr/include/SDL2/SDL.h

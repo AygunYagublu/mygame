@@ -225,4 +225,5 @@ CMakeFiles/MyGame.dir/main.cpp.o: /home/kanan/mygame/main.cpp \
  /usr/include/SDL2/SDL_system.h /usr/include/SDL2/SDL_timer.h \
  /usr/include/SDL2/SDL_version.h /usr/include/SDL2/SDL_locale.h \
  /usr/include/SDL2/SDL_misc.h /home/kanan/mygame/game.h \
- /home/kanan/mygame/sound.h
+ /home/kanan/mygame/sound.h /home/kanan/mygame/score.h \
+ /usr/include/SDL2/SDL_ttf.h /usr/include/SDL2/SDL.h

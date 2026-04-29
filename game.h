@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "sound.h"
+#include "score.h"
 
 #define MAX_BALLS 3
 #define MAX_PARTICLES 50
@@ -33,6 +34,7 @@ private:
     SDL_Renderer* renderer;
     Sound sound;
     bool running;
+    ScoreBoard scoreboard;
 
     Ball     balls[MAX_BALLS];
     Particle particles[MAX_PARTICLES];
