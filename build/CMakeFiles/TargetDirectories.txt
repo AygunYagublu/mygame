@@ -1,0 +1,3 @@
+/home/kanan/mygame/build/CMakeFiles/MyGame.dir
+/home/kanan/mygame/build/CMakeFiles/edit_cache.dir
+/home/kanan/mygame/build/CMakeFiles/rebuild_cache.dir
