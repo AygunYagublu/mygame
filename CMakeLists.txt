@@ -8,7 +8,8 @@ find_package(SDL2 REQUIRED)
 add_executable(MyGame
     main.cpp
     game.cpp
+    sound.cpp
 )
 
 target_include_directories(MyGame PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(MyGame ${SDL2_LIBRARIES})
+target_link_libraries(MyGame ${SDL2_LIBRARIES} m)

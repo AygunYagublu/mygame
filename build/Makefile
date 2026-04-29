@@ -177,6 +177,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+sound.o: sound.cpp.o
+.PHONY : sound.o
+
+# target to build an object file
+sound.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/sound.cpp.o
+.PHONY : sound.cpp.o
+
+sound.i: sound.cpp.i
+.PHONY : sound.i
+
+# target to preprocess a source file
+sound.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/sound.cpp.i
+.PHONY : sound.cpp.i
+
+sound.s: sound.cpp.s
+.PHONY : sound.s
+
+# target to generate assembly for a file
+sound.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGame.dir/build.make CMakeFiles/MyGame.dir/sound.cpp.s
+.PHONY : sound.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +216,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... sound.o"
+	@echo "... sound.i"
+	@echo "... sound.s"
 .PHONY : help
 
 

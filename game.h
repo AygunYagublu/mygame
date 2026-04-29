@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include "sound.h"
 
 class Game {
 public:
@@ -8,6 +9,7 @@ public:
 
 private:
     SDL_Renderer* renderer;
+    Sound sound;
     bool running;
 
     /* top */
@@ -21,6 +23,7 @@ private:
 
     /* skor */
     int score;
+    int high_score;
 
     void handle_events();
     void update(float dt);

@@ -44,20 +44,22 @@ void Game::update(float dt) {
     ball_x += ball_vx * dt;
     ball_y += ball_vy * dt;
 
-    /* sol və sağ divar */
-    if (ball_x <= 0) {
+   if (ball_x <= 0) {
         ball_x  = 0;
         ball_vx = -ball_vx;
+        sound.play_bounce();
     }
     if (ball_x + ball_size >= SCREEN_W) {
         ball_x  = SCREEN_W - ball_size;
         ball_vx = -ball_vx;
+        sound.play_bounce();
     }
 
     /* yuxarı divar */
     if (ball_y <= 0) {
         ball_y  = 0;
         ball_vy = -ball_vy;
+        sound.play_bounce();
     }
 
     /* paddle collision */
@@ -68,10 +70,12 @@ void Game::update(float dt) {
         ball_vy = -ball_vy;
         ball_y  = paddle_y - ball_size;
         score++;
+        sound.play_score();
     }
 
     /* aşağı düşdü — yenidən başla */
     if (ball_y > SCREEN_H) {
+        sound.play_gameover();
         reset_ball();
         score = 0;
     }
