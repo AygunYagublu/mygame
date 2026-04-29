@@ -3,14 +3,25 @@
 #include "sound.h"
 
 #define MAX_BALLS 3
+#define MAX_PARTICLES 50
 
 struct Ball {
     float x, y;
     float vx, vy;
     int   size;
     bool  active;
-    /* rəng */
     uint8_t r, g, b;
+    /* parıltı efekti */
+    float flash_timer;
+};
+
+struct Particle {
+    float x, y;
+    float vx, vy;
+    float life;
+    float max_life;
+    uint8_t r, g, b;
+    bool active;
 };
 
 class Game {
@@ -23,14 +34,12 @@ private:
     Sound sound;
     bool running;
 
-    /* toplar */
-    Ball balls[MAX_BALLS];
+    Ball     balls[MAX_BALLS];
+    Particle particles[MAX_PARTICLES];
 
-    /* paddle */
     float paddle_x, paddle_y;
     int   paddle_w, paddle_h;
 
-    /* skor */
     int score;
     int high_score;
 
@@ -39,4 +48,7 @@ private:
     void render();
     void init_ball(int i);
     void reset_balls();
+    void spawn_particles(float x, float y, uint8_t r, uint8_t g, uint8_t b);
+    void update_particles(float dt);
+    void render_particles();
 };
