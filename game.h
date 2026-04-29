@@ -2,6 +2,17 @@
 #include <SDL2/SDL.h>
 #include "sound.h"
 
+#define MAX_BALLS 3
+
+struct Ball {
+    float x, y;
+    float vx, vy;
+    int   size;
+    bool  active;
+    /* rəng */
+    uint8_t r, g, b;
+};
+
 class Game {
 public:
     Game(SDL_Renderer* renderer);
@@ -12,10 +23,8 @@ private:
     Sound sound;
     bool running;
 
-    /* top */
-    float ball_x, ball_y;
-    float ball_vx, ball_vy;
-    int   ball_size;
+    /* toplar */
+    Ball balls[MAX_BALLS];
 
     /* paddle */
     float paddle_x, paddle_y;
@@ -28,5 +37,6 @@ private:
     void handle_events();
     void update(float dt);
     void render();
-    void reset_ball();
+    void init_ball(int i);
+    void reset_balls();
 };
