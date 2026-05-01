@@ -7,8 +7,8 @@ public:
     ScoreBoard();
     ~ScoreBoard();
 
-    void render(SDL_Renderer* renderer, int score, int high_score, int level);
-
+void render(SDL_Renderer* renderer, int score, int high_score, int level, int lives);
+void render_gameover(SDL_Renderer* renderer, int score, int high_score);
 private:
     TTF_Font* font_large;
     TTF_Font* font_small;

@@ -42,6 +42,9 @@ private:
     int   level;
     float speed_multiplier;
 
+    int lives;
+    bool game_over;
+
     float paddle_x, paddle_y;
     int   paddle_w, paddle_h;
 

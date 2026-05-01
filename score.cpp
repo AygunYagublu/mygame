@@ -57,7 +57,8 @@ void ScoreBoard::draw_text(SDL_Renderer* renderer, TTF_Font* font,
     SDL_FreeSurface(surface);
 }
 
-void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score, int level) {    if (!initialized) return;
+void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score, int level, int lives) {
+        if (!initialized) return;
 
     char buf[64];
 
@@ -69,6 +70,12 @@ void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score, int l
     snprintf(buf, sizeof(buf), "EN COX: %d", high_score);
     /* səviyyə — mərkəz üst */
     snprintf(buf, sizeof(buf), "SΕVIYYΕ: %d", level);
+    /* həyatlar — ürək şəklində */
+    for (int i = 0; i < lives; i++) {
+        snprintf(buf, sizeof(buf), "%s", "♥");
+        draw_text(renderer, font_small, buf,
+                  20 + i * 25, 55, 255, 80, 80);
+    }
     draw_text(renderer, font_small, buf, 350, 20, 100, 255, 150);
     int x = 800 - 200;
     draw_text(renderer, font_small, buf, x, 20, 180, 180, 255);
@@ -77,4 +84,28 @@ void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score, int l
     draw_text(renderer, font_small,
         "Mouse ile paddle-i idar et | ESC - cix",
         160, 575, 100, 100, 150);
+}
+
+void ScoreBoard::render_gameover(SDL_Renderer* renderer,
+                                  int score, int high_score) {
+    if (!initialized) return;
+
+    char buf[64];
+
+    draw_text(renderer, font_large, "OYUN BITTI!",
+              280, 200, 255, 80, 80);
+
+    snprintf(buf, sizeof(buf), "Skor: %d", score);
+    draw_text(renderer, font_large, buf,
+              330, 270, 255, 255, 100);
+
+    snprintf(buf, sizeof(buf), "En cox: %d", high_score);
+    draw_text(renderer, font_small, buf,
+              330, 320, 180, 180, 255);
+
+    draw_text(renderer, font_small, "R - yeniden basla",
+              300, 380, 100, 255, 150);
+
+    draw_text(renderer, font_small, "ESC - cix",
+              340, 410, 150, 150, 150);
 }
