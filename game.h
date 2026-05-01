@@ -6,6 +6,15 @@
 #define MAX_BALLS 3
 #define MAX_PARTICLES 50
 
+#define MAX_STARS 100
+
+struct Star {
+    float x, y;
+    float speed;
+    uint8_t brightness;
+    int size;
+};
+
 struct Ball {
     float x, y;
     float vx, vy;
@@ -38,6 +47,11 @@ private:
 
     Ball     balls[MAX_BALLS];
     Particle particles[MAX_PARTICLES];
+
+    Star stars[MAX_STARS];
+    void init_stars();
+    void update_stars(float dt);
+    void render_stars();
 
     int   level;
     float speed_multiplier;

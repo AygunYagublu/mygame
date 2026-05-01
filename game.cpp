@@ -13,7 +13,8 @@ static const uint8_t BALL_COLORS[MAX_BALLS][3] = {
 };
 
 Game::Game(SDL_Renderer* rend)
-    : renderer(rend), running(true), score(0), high_score(0), level(1), speed_multiplier(1.0f), lives(3), game_over(false) {
+    : renderer(rend), running(true), score(0), high_score(0),
+      level(1), speed_multiplier(1.0f), lives(3), game_over(false) {
     paddle_w = 120;
     paddle_h = 15;
     paddle_x = SCREEN_W / 2 - paddle_w / 2;
@@ -22,7 +23,41 @@ Game::Game(SDL_Renderer* rend)
     for (int i = 0; i < MAX_PARTICLES; i++)
         particles[i].active = false;
 
+    init_stars();
     reset_balls();
+}
+
+void Game::init_stars() {
+    for (int i = 0; i < MAX_STARS; i++) {
+        stars[i].x          = rand() % SCREEN_W;
+        stars[i].y          = rand() % SCREEN_H;
+        stars[i].speed      = 20.0f + (rand() % 80);
+        stars[i].brightness = 80 + (rand() % 175);
+        stars[i].size       = (rand() % 3) + 1;
+    }
+}
+
+void Game::update_stars(float dt) {
+    for (int i = 0; i < MAX_STARS; i++) {
+        stars[i].y += stars[i].speed * dt;
+        if (stars[i].y > SCREEN_H) {
+            stars[i].y          = 0;
+            stars[i].x          = rand() % SCREEN_W;
+            stars[i].brightness = 80 + (rand() % 175);
+        }
+    }
+}
+
+void Game::render_stars() {
+    for (int i = 0; i < MAX_STARS; i++) {
+        uint8_t b = stars[i].brightness;
+        SDL_SetRenderDrawColor(renderer, b, b, b, 255);
+        SDL_Rect r = {
+            (int)stars[i].x, (int)stars[i].y,
+            stars[i].size,   stars[i].size
+        };
+        SDL_RenderFillRect(renderer, &r);
+    }
 }
 
 void Game::init_ball(int i) {
@@ -40,11 +75,8 @@ void Game::init_ball(int i) {
         {-220.0f, -280.0f},
         { 200.0f, -320.0f},
     };
-    balls[i].vx = speeds[i][0];
-    balls[i].vy = speeds[i][1];
-    /* sürəti çətinlik səviyyəsinə görə tənzimlə */
-    balls[i].vx *= speed_multiplier;
-    balls[i].vy *= speed_multiplier;
+    balls[i].vx = speeds[i][0] * speed_multiplier;
+    balls[i].vy = speeds[i][1] * speed_multiplier;
 }
 
 void Game::reset_balls() {
@@ -61,10 +93,8 @@ void Game::spawn_particles(float x, float y, uint8_t r, uint8_t g, uint8_t b) {
     int spawned = 0;
     for (int i = 0; i < MAX_PARTICLES && spawned < 12; i++) {
         if (particles[i].active) continue;
-
         float angle = (float)(rand() % 360) * 3.14159f / 180.0f;
         float speed = 80.0f + (rand() % 150);
-
         particles[i].active   = true;
         particles[i].x        = x;
         particles[i].y        = y;
@@ -93,14 +123,11 @@ void Game::update_particles(float dt) {
 void Game::render_particles() {
     for (int i = 0; i < MAX_PARTICLES; i++) {
         if (!particles[i].active) continue;
-
         float alpha = particles[i].life / particles[i].max_life;
         uint8_t a   = (uint8_t)(alpha * 255);
-
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer,
             particles[i].r, particles[i].g, particles[i].b, a);
-
         int size = (int)(4 * alpha) + 1;
         SDL_Rect r = {
             (int)particles[i].x - size/2,
@@ -130,7 +157,23 @@ void Game::handle_events() {
 }
 
 void Game::update(float dt) {
+    update_stars(dt);
     update_particles(dt);
+
+    if (game_over) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) running = false;
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_r)
+                    reset_balls();
+                if (e.key.keysym.sym == SDLK_ESCAPE)
+                    running = false;
+            }
+        }
+        return;
+    }
+
     int active_count = 0;
 
     for (int i = 0; i < MAX_BALLS; i++) {
@@ -162,7 +205,6 @@ void Game::update(float dt) {
             spawn_particles(b.x + b.size/2, b.y, b.r, b.g, b.b);
         }
 
-        /* paddle collision */
         if (b.y + b.size >= paddle_y &&
             b.y + b.size <= paddle_y + paddle_h &&
             b.x + b.size >= paddle_x &&
@@ -172,22 +214,18 @@ void Game::update(float dt) {
             b.flash_timer = 0.15f;
             score++;
             sound.play_score();
-            /* hər 10 skorda səviyyə artır */
+            spawn_particles(b.x + b.size/2, b.y + b.size,
+                            b.r, b.g, b.b);
+
             if (score % 10 == 0) {
                 level++;
                 speed_multiplier += 0.15f;
-                /* bütün topların sürətini artır */
                 for (int j = 0; j < MAX_BALLS; j++) {
                     if (!balls[j].active) continue;
                     balls[j].vx *= 1.15f;
                     balls[j].vy *= 1.15f;
                 }
             }
-            spawn_particles(
-                b.x + b.size/2,
-                b.y + b.size,
-                b.r, b.g, b.b
-            );
         }
 
         if (b.y > SCREEN_H) {
@@ -196,14 +234,13 @@ void Game::update(float dt) {
         }
     }
 
-   if (active_count == 0) {
+    if (active_count == 0) {
         lives--;
         if (lives <= 0) {
             game_over = true;
             if (score > high_score)
                 high_score = score;
         } else {
-            /* həyat var — topları yenidən başlat, skoru saxla */
             int saved_score = score;
             int saved_level = level;
             float saved_speed = speed_multiplier;
@@ -212,27 +249,11 @@ void Game::update(float dt) {
             score = saved_score;
             level = saved_level;
             speed_multiplier = saved_speed;
-            /* topların sürətini düzəlt */
             for (int i = 0; i < MAX_BALLS; i++) {
                 balls[i].vx *= speed_multiplier;
                 balls[i].vy *= speed_multiplier;
             }
         }
-    }
-
-    /* game over — R ilə yenidən başla */
-    if (game_over) {
-        SDL_Event e;
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = false;
-            if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_r)
-                    reset_balls();
-                if (e.key.keysym.sym == SDLK_ESCAPE)
-                    running = false;
-            }
-        }
-        return;
     }
 }
 
@@ -240,32 +261,20 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 15, 15, 35, 255);
     SDL_RenderClear(renderer);
 
-    /* divarlar */
-    SDL_SetRenderDrawColor(renderer, 80, 80, 120, 255);
-    SDL_RenderDrawLine(renderer, 0, 0, SCREEN_W, 0);
-    SDL_RenderDrawLine(renderer, 0, 0, 0, SCREEN_H);
-    SDL_RenderDrawLine(renderer, SCREEN_W-1, 0, SCREEN_W-1, SCREEN_H);
-
+    render_stars();
     render_particles();
 
-    /* toplar */
     for (int i = 0; i < MAX_BALLS; i++) {
         if (!balls[i].active) continue;
-
         Ball& b = balls[i];
-
-        /* flash efekti — ağ parıltı */
-        if (b.flash_timer > 0) {
+        if (b.flash_timer > 0)
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        } else {
+        else
             SDL_SetRenderDrawColor(renderer, b.r, b.g, b.b, 255);
-        }
-
         SDL_Rect r = {(int)b.x, (int)b.y, b.size, b.size};
         SDL_RenderFillRect(renderer, &r);
     }
 
-    /* paddle */
     SDL_SetRenderDrawColor(renderer, 50, 150, 255, 255);
     SDL_Rect paddle_rect = {
         (int)paddle_x, (int)paddle_y,
@@ -273,9 +282,8 @@ void Game::render() {
     };
     SDL_RenderFillRect(renderer, &paddle_rect);
 
-    /* skor ekranı */
-scoreboard.render(renderer, score, high_score, level, lives);
-    /* game over ekranı */
+    scoreboard.render(renderer, score, high_score, level, lives);
+
     if (game_over) {
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
@@ -283,6 +291,7 @@ scoreboard.render(renderer, score, high_score, level, lives);
         SDL_RenderFillRect(renderer, &overlay);
         scoreboard.render_gameover(renderer, score, high_score);
     }
+
     SDL_RenderPresent(renderer);
 }
 
