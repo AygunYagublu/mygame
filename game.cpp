@@ -13,7 +13,7 @@ static const uint8_t BALL_COLORS[MAX_BALLS][3] = {
 };
 
 Game::Game(SDL_Renderer* rend)
-    : renderer(rend), running(true), score(0), high_score(0) {
+    : renderer(rend), running(true), score(0), high_score(0), level(1), speed_multiplier(1.0f) {
     paddle_w = 120;
     paddle_h = 15;
     paddle_x = SCREEN_W / 2 - paddle_w / 2;
@@ -42,12 +42,17 @@ void Game::init_ball(int i) {
     };
     balls[i].vx = speeds[i][0];
     balls[i].vy = speeds[i][1];
+    /* sürəti çətinlik səviyyəsinə görə tənzimlə */
+    balls[i].vx *= speed_multiplier;
+    balls[i].vy *= speed_multiplier;
 }
 
 void Game::reset_balls() {
     for (int i = 0; i < MAX_BALLS; i++)
         init_ball(i);
     score = 0;
+    level = 1;
+    speed_multiplier = 1.0f;
 }
 
 void Game::spawn_particles(float x, float y, uint8_t r, uint8_t g, uint8_t b) {
@@ -165,6 +170,17 @@ void Game::update(float dt) {
             b.flash_timer = 0.15f;
             score++;
             sound.play_score();
+            /* hər 10 skorda səviyyə artır */
+            if (score % 10 == 0) {
+                level++;
+                speed_multiplier += 0.15f;
+                /* bütün topların sürətini artır */
+                for (int j = 0; j < MAX_BALLS; j++) {
+                    if (!balls[j].active) continue;
+                    balls[j].vx *= 1.15f;
+                    balls[j].vy *= 1.15f;
+                }
+            }
             spawn_particles(
                 b.x + b.size/2,
                 b.y + b.size,
@@ -223,7 +239,7 @@ void Game::render() {
     SDL_RenderFillRect(renderer, &paddle_rect);
 
     /* skor ekranı */
-    scoreboard.render(renderer, score, high_score);
+scoreboard.render(renderer, score, high_score, level);
 
     SDL_RenderPresent(renderer);
 }

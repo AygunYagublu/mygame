@@ -39,6 +39,9 @@ private:
     Ball     balls[MAX_BALLS];
     Particle particles[MAX_PARTICLES];
 
+    int   level;
+    float speed_multiplier;
+
     float paddle_x, paddle_y;
     int   paddle_w, paddle_h;
 

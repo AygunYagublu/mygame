@@ -57,8 +57,7 @@ void ScoreBoard::draw_text(SDL_Renderer* renderer, TTF_Font* font,
     SDL_FreeSurface(surface);
 }
 
-void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score) {
-    if (!initialized) return;
+void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score, int level) {    if (!initialized) return;
 
     char buf[64];
 
@@ -68,6 +67,9 @@ void ScoreBoard::render(SDL_Renderer* renderer, int score, int high_score) {
 
     /* ən yüksək skor — sağ üst */
     snprintf(buf, sizeof(buf), "EN COX: %d", high_score);
+    /* səviyyə — mərkəz üst */
+    snprintf(buf, sizeof(buf), "SΕVIYYΕ: %d", level);
+    draw_text(renderer, font_small, buf, 350, 20, 100, 255, 150);
     int x = 800 - 200;
     draw_text(renderer, font_small, buf, x, 20, 180, 180, 255);
 

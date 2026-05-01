@@ -7,7 +7,7 @@ public:
     ScoreBoard();
     ~ScoreBoard();
 
-    void render(SDL_Renderer* renderer, int score, int high_score);
+    void render(SDL_Renderer* renderer, int score, int high_score, int level);
 
 private:
     TTF_Font* font_large;
